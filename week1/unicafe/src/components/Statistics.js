@@ -1,4 +1,5 @@
 import React from 'react'
+import { Statistic } from './Statistic'
 
 export const Statistics = (props) => {
   if (props.allClicks === 0) {
@@ -6,14 +7,14 @@ export const Statistics = (props) => {
   }
 
   return (
-    <div>
+    <>
       <h2>Statistics</h2>
-      <p>good {props.good}</p>
-      <p>neutal {props.neutral}</p>
-      <p>bad {props.bad}</p>
-      <p>all {props.allClicks}</p>
-      <p>average {props.average}</p>
-      <p>positive {props.positive}%</p>
-    </div>
+      <Statistic text="good" value={props.good}/>
+      <Statistic text="neutral" value={props.neutral}/>
+      <Statistic text="bad" value={props.bad}/>
+      <Statistic text="all" value={props.allClicks}/>
+      <Statistic text="average" value={props.average}/>
+      <Statistic text="positive" value={props.positive} endSymbol="%"/>
+    </>
   )
 }
