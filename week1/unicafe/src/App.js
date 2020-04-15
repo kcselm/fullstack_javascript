@@ -25,10 +25,10 @@ function App() {
 
   let allClicks = good + neutral + bad
 
-  let average = (good - bad) / allClicks
+  let average = ((good - bad) / allClicks).toFixed(2)
   if (isNaN(average)) {average = 0}
 
-  let positive = (good / allClicks) * 100
+  let positive = ((good / allClicks) * 100).toFixed(2)
   if (isNaN(positive)) {positive = 0}
 
   return (

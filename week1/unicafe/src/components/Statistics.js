@@ -9,12 +9,16 @@ export const Statistics = (props) => {
   return (
     <>
       <h2>Statistics</h2>
-      <Statistic text="good" value={props.good}/>
-      <Statistic text="neutral" value={props.neutral}/>
-      <Statistic text="bad" value={props.bad}/>
-      <Statistic text="all" value={props.allClicks}/>
-      <Statistic text="average" value={props.average}/>
-      <Statistic text="positive" value={props.positive} endSymbol="%"/>
+      <table>
+        <tbody>    
+          <tr><Statistic text="good" value={props.good}/></tr>
+          <tr><Statistic text="neutral" value={props.neutral}/></tr>
+          <tr><Statistic text="bad" value={props.bad}/></tr>
+          <tr><Statistic text="all" value={props.allClicks}/></tr>
+          <tr><Statistic text="average" value={props.average}/></tr>
+          <tr><Statistic text="positive" value={props.positive} endSymbol="%"/></tr>
+        </tbody>
+      </table>
     </>
   )
 }
