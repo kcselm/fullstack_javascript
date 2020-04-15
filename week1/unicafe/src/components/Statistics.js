@@ -1,6 +1,10 @@
 import React from 'react'
 
 export const Statistics = (props) => {
+  if (props.allClicks === 0) {
+    return <p>No Feedback Given</p>
+  }
+
   return (
     <div>
       <h2>Statistics</h2>

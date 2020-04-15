@@ -9,17 +9,14 @@ export const Feedback = () => {
     
   const goodClick = () => {
     setGood(good + 1)
-    console.log("good clicked", good)
-   }
+  }
 
    const mehClick = () => {
     setNeutral(neutral + 1)
-    console.log("neutral clicked")
    }
 
    const badClick = () => {
     setBad(bad + 1)
-    console.log("bad clicked")
    }
 
   let allClicks = good + neutral + bad
