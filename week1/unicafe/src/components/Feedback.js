@@ -17,9 +17,17 @@ export const Feedback = () => {
    }
 
    const badClick = () => {
-     setBad(bad + 1)
+    setBad(bad + 1)
     console.log("bad clicked")
    }
+
+  let allClicks = good + neutral + bad
+
+  let average = (good - bad) / allClicks
+  if (isNaN(average)) {average = 0}
+
+  let positive = (good / allClicks) * 100
+  if (isNaN(positive)) {positive = 0}
 
   return (
     <div>
@@ -33,6 +41,9 @@ export const Feedback = () => {
       <p>good {good}</p>
       <p>neutal {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {allClicks}</p>
+      <p>average {average}</p>
+      <p>positive {positive}%</p>
     </div>
   )
 }
