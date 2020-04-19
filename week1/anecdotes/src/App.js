@@ -3,7 +3,8 @@ import './App.css';
 
 const App = () => {
   const [selected, setSelected] = useState(0)
-  
+  const [votes, setVotes] = useState([0,0,0,0,0,0])
+
   const anecdotes = [
     'If it hurts, do it more often',
     'Adding manpower to a late software project makes it later!',
@@ -17,11 +18,20 @@ const App = () => {
     setSelected(Math.floor(Math.random() * anecdotes.length))
   }
 
+  const upVote = () => {
+    const newVotes = [...votes]
+    newVotes[selected] += 1 
+
+    setVotes(newVotes)
+  }
+
   return (
     <div className="App">
       <button onClick={randAnecdote}>Next Anecdote</button>
+      <button onClick={upVote}>Vote</button>
       <br />
-      {anecdotes[selected]}
+      <p>{anecdotes[selected]}</p>
+      <p>Votes Received: {votes[selected]}</p>
     </div>
   );
 }
