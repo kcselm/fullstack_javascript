@@ -3,12 +3,12 @@ import { Header } from './Header'
 import { Content } from './Content'
 import { Total } from './Total'
 
-export const Course = (props) => {
+export const Course = ({ course }) => {
   return (
     <div>
-        <Header course={props.course} /> 
-        <Content course={props.course} />
-        <Total course={props.course} />
+        <Header course={course} /> 
+        <Content course={course} />
+        <Total course={course} />
     </div>
   )
 }
