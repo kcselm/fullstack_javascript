@@ -7,10 +7,15 @@ const App = () => {
       name: 'Jenny',
       number: '867-5309',
       id: 1, 
-     }
+     },
   ]) 
+  const [ searchTerm, setSearch ]  = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+
+  const handleSearchChange = e => {
+    setSearch(e.target.value)
+  }
 
   const handleNameChange = e => {
     setNewName(e.target.value)
@@ -44,6 +49,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        Name Search: <input value={searchTerm} onChange={handleSearchChange}/>
+      </div>
+      <h2>Add New Record</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange}/>
@@ -56,8 +65,10 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person =>
-        <ul key={person.id}>{person.name}  {person.number}</ul>)}
+      {persons
+      .filter(person => person.name.includes(searchTerm))
+      .map(person =>
+        <ul key={person.name}>{person.name}  {person.number}</ul>)}
     </div>
   )
 }
