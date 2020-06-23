@@ -11,7 +11,6 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
 
   const handleNameChange = e => {
-    console.log(e.target.value)
     setNewName(e.target.value)
   }
   
@@ -21,8 +20,17 @@ const App = () => {
       name: newName,
       id: persons.length + 1, 
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
+    const names = persons.map(person => person.name)
+    console.log(names)
+
+    if (names.includes(newName)) {
+      alert(`${newName} is already added`)
+      setNewName('')
+    } else {
+      console.log('persons', persons)
+      setPersons(persons.concat(newPerson))
+      setNewName('')
+    }
   }
 
   return (
