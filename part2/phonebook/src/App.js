@@ -4,20 +4,27 @@ import './App.css';
 const App = () => {
   const [ persons, setPersons ] = useState([
     {
-      name: 'Arto Hellas',
-      id: 1
+      name: 'Jenny',
+      number: '867-5309',
+      id: 1, 
      }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const handleNameChange = e => {
     setNewName(e.target.value)
   }
-  
+
+  const handleNumberChange = e => {
+    setNewNumber(e.target.value)
+  } 
+
   const addPerson = e => {
     e.preventDefault()
     const newPerson = {
       name: newName,
+      number: newNumber,
       id: persons.length + 1, 
     }
     const names = persons.map(person => person.name)
@@ -30,6 +37,7 @@ const App = () => {
       console.log('persons', persons)
       setPersons(persons.concat(newPerson))
       setNewName('')
+      setNewNumber('')
     }
   }
 
@@ -41,12 +49,15 @@ const App = () => {
           name: <input value={newName} onChange={handleNameChange}/>
         </div>
         <div>
+          number: <input value={newNumber} onChange={handleNumberChange}/>
+        </div>
+        <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
       {persons.map(person =>
-        <ul key={person.id}>{person.name}</ul>)}
+        <ul key={person.id}>{person.name}  {person.number}</ul>)}
     </div>
   )
 }
