@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 
+import { DisplayPeople } from './components/DisplayPeople'
+import { Search } from './components/Search'
+import { Form } from './components/Form'
+
 const App = () => {
   const [ persons, setPersons ] = useState([
     {
@@ -50,25 +54,19 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <div>
-        Name Search: <input value={searchTerm} onChange={handleSearchChange}/>
+        <Search searchTerm={searchTerm} onChange={handleSearchChange}/>
+        {/* Name Search: <input value={searchTerm} onChange={handleSearchChange}/> */}
       </div>
       <h2>Add New Record</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form 
+      addPerson={addPerson}
+      handleNameChange={handleNameChange}
+      handleNumberChange={handleNumberChange}
+      newName={newName}
+      newNumber={newNumber}
+      />
       <h2>Numbers</h2>
-      {persons
-      .filter(person => person.name.includes(searchTerm))
-      .map(person =>
-        <ul key={person.name}>{person.name}  {person.number}</ul>)}
+      <DisplayPeople persons={persons} searchTerm={searchTerm}/>
     </div>
   )
 }
