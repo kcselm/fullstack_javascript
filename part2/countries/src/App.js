@@ -13,6 +13,12 @@ const App = () => {
     setSearchTerm(e.target.value)
   }
 
+  const handleShowView = country => {
+    // setSearchTerm(country)
+    console.log(country)
+    setCountries([country])
+  }
+
   useEffect(() => {
     axios
       .get(`https://restcountries.eu/rest/v2/name/${searchTerm}`)
@@ -23,28 +29,33 @@ const App = () => {
       .catch(error => console.log(error))
   }, [searchTerm])
 
+  const countryView = countries.map(country => 
+    <div key={country.name}>
+      <h3>{country.name}</h3>
+      <ul>capital: {country.capital} </ul>
+      <ul>population: {country.population}</ul>
+      <h3>Languages</h3>
+      {country.languages.map(language => 
+        <li key={language.name}>{language.name}</li>
+      )}
+      <img src={country.flag}></img>
+    </div>
+  )
+
+
   const controlOutput = countries => {
     if (countries.length >= 10) {
       return <p>Too many matches, specify another filter</p> 
     } else if (countries.length === 1) {
-      return (
-       countries.map(country => 
-        <div>
-          <h3>{country.name}</h3>
-          <ul>capital: {country.capital} </ul>
-          <ul>population: {country.population}</ul>
-          <h3>Languages</h3>
-          {country.languages.map(language => 
-            <li key={language.name}>{language.name}</li>
-          )}
-          <img src={country.flag}></img>
-        </div>
-        )
-      )
+      return countryView
     } else {
       return (
         countries.map(country => 
-          <ul key={country.numericCode}>{country.name} </ul>
+          <div>
+            <ul key={country.numericCode}>{country.name}   
+              <button onClick={() => handleShowView(country)}>Show</button>
+            </ul>
+          </div>
         )
       )
     }
