@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 import { DisplayPeople } from './components/DisplayPeople'
 import { Search } from './components/Search'
 import { Form } from './components/Form'
+import axios from 'axios';
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    {
-      name: 'Jenny',
-      number: '867-5309',
-      id: 1, 
-     },
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
   const [ searchTerm, setSearch ]  = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log(response.data)
+        setPersons(response.data)
+      })
+      .catch(error => console.log(error))
+  }, [])
 
   const handleSearchChange = e => {
     setSearch(e.target.value)
