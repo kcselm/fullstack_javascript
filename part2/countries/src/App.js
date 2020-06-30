@@ -88,8 +88,6 @@ const App = () => {
     }
   } 
 
-
-
   return (
     <div className="App">
       find countries <input value={searchTerm} onChange={handleSearchTerm}/>
