@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+import personService from './services/persons'
+
 import { DisplayPeople } from './components/DisplayPeople'
 import { Search } from './components/Search'
 import { Form } from './components/Form'
-import axios from 'axios';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -13,13 +14,12 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
-      })
-      .catch(error => console.log(error))
+    personService.getPersons()
+    .then(response => {
+      console.log(response.data)
+      setPersons(response.data)
+    })
+    .catch(error => console.log(error))
   }, [])
 
   const handleSearchChange = e => {
@@ -49,8 +49,7 @@ const App = () => {
       setNewName('')
     } else {
       console.log('persons', persons)
-      axios
-        .post('http://localhost:3001/persons', newPerson)
+      personService.addPerson(newPerson)
         .then(response => {
           setPersons(persons.concat(newPerson))
           setNewName('')
