@@ -16,7 +16,7 @@ const App = () => {
   useEffect(() => {
     personService.getPersons()
     .then(response => {
-      console.log(response.data)
+      console.log("persons", response.data)
       setPersons(response.data)
     })
     .catch(error => console.log(error))
@@ -58,6 +58,12 @@ const App = () => {
     }
   }
 
+  const deletePerson = id => {
+    personService.deletePerson(id)
+    console.log('after delete', persons)
+    setPersons(persons.filter(person => person.id !== id))
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -74,7 +80,14 @@ const App = () => {
       newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <DisplayPeople persons={persons} searchTerm={searchTerm}/>
+      {persons.map(person => 
+        <DisplayPeople 
+          key={person.id}
+          person={person} 
+          searchTerm={searchTerm} 
+          deletePerson={() => deletePerson(person.id)}/> 
+        )
+      }
     </div>
   )
 }

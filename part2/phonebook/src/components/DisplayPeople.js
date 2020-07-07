@@ -1,12 +1,16 @@
 import React from 'react'
 
+// import personService from '../services/persons'
+
 export const DisplayPeople = props => {
+  // console.log("props", props)
+
   return (
     <div>
-      {props.persons
-      .filter(person => person.name.includes(props.searchTerm))
-      .map(person =>
-        <ul key={person.name}>{person.name}  {person.number}</ul>)}
+      <div className="person">
+        <ul >{props.person.name}  {props.person.number}</ul>
+        <button className="deleteBtn" onClick={() => props.deletePerson(props.person.id)}>Delete</button>
+      </div>
     </div>
   )
 }
