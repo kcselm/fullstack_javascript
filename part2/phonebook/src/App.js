@@ -6,12 +6,14 @@ import personService from './services/persons'
 import { DisplayPeople } from './components/DisplayPeople'
 import { Search } from './components/Search'
 import { Form } from './components/Form'
+import { Notification } from './components/Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ searchTerm, setSearch ]  = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
+  const [ status, setStatus ] = useState('')
 
   useEffect(() => {
     personService.getPersons()
@@ -45,6 +47,16 @@ const App = () => {
     console.log(names)
 
     if (names.includes(newName)) {
+      // updatePerson(id, newPerson, newNumber)
+      // const personID = persons.filter(person => person.name = newName)
+      // const updatedPerson = {...newPerson, number: newNumber}
+      // console.log('personID', personID)
+      console.log('persons', persons)
+
+      // personService.updateNumber(personID.id, updatedPerson)
+      //   .then(response => {
+      //     setPersons(persons.map(person => person.id !== newPerson.id ? person : response.data))
+      //   })
       alert(`${newName} is already added`)
       setNewName('')
     } else {
@@ -52,11 +64,23 @@ const App = () => {
       personService.addPerson(newPerson)
         .then(response => {
           setPersons(persons.concat(newPerson))
+          setStatus(`${newName} added to the list`)
+          setTimeout(() => {
+            setStatus('')
+           } , 5000)
           setNewName('')
           setNewNumber('')
         })
     }
   }
+
+  // const updatePerson = (id, person, newNumber) => {
+  //   const newPerson = {...person, number: newNumber}
+  //   personService.updateNumber(id, newPerson)
+  //     .then(response => {
+  //       console.log("update worked!")
+  //     })
+  // }
 
   const deletePerson = id => {
     personService.deletePerson(id)
@@ -72,6 +96,7 @@ const App = () => {
         {/* Name Search: <input value={searchTerm} onChange={handleSearchChange}/> */}
       </div>
       <h2>Add New Record</h2>
+      <Notification message={status} />
       <Form 
       addPerson={addPerson}
       handleNameChange={handleNameChange}
@@ -80,7 +105,9 @@ const App = () => {
       newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      {persons.map(person => 
+      {persons
+      .filter(person => person.name.includes(searchTerm))
+      .map(person => 
         <DisplayPeople 
           key={person.id}
           person={person} 
