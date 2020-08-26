@@ -13,7 +13,7 @@ const App = () => {
   const [ searchTerm, setSearch ]  = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
-  const [ status, setStatus ] = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   useEffect(() => {
     personService.getPersons()
@@ -36,6 +36,13 @@ const App = () => {
     setNewNumber(e.target.value)
   } 
 
+  const notifyWith = (message, type='success') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const addPerson = e => {
     e.preventDefault()
     const newPerson = {
@@ -46,41 +53,34 @@ const App = () => {
     const names = persons.map(person => person.name)
     console.log(names)
 
-    if (names.includes(newName)) {
-      // updatePerson(id, newPerson, newNumber)
-      // const personID = persons.filter(person => person.name = newName)
-      // const updatedPerson = {...newPerson, number: newNumber}
-      // console.log('personID', personID)
-      console.log('persons', persons)
+    const existing = persons.find(p => p.name === newName)
+    console.log('existing', existing)
 
-      // personService.updateNumber(personID.id, updatedPerson)
-      //   .then(response => {
-      //     setPersons(persons.map(person => person.id !== newPerson.id ? person : response.data))
-      //   })
-      alert(`${newName} is already added`)
-      setNewName('')
+    // if (names.includes(newName)) {
+    if (existing) {
+      const ok = window.confirm(`${existing.name} already in phonebook, replace the old number with new one?`)
+      if (ok) {
+        personService.updateNumber(existing.id, {
+          name: existing.name,
+          number: newNumber,
+        }).then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== existing.id ? person : returnedPerson))
+          notifyWith(`Changed number of ${existing.name}`)
+        })
+        setNewName('')
+        setNewNumber('')
+      }
     } else {
       console.log('persons', persons)
       personService.addPerson(newPerson)
         .then(response => {
           setPersons(persons.concat(newPerson))
-          setStatus(`${newName} added to the list`)
-          setTimeout(() => {
-            setStatus('')
-           } , 5000)
+          notifyWith(`${newName} added to the list`)
           setNewName('')
           setNewNumber('')
         })
     }
   }
-
-  // const updatePerson = (id, person, newNumber) => {
-  //   const newPerson = {...person, number: newNumber}
-  //   personService.updateNumber(id, newPerson)
-  //     .then(response => {
-  //       console.log("update worked!")
-  //     })
-  // }
 
   const deletePerson = id => {
     personService.deletePerson(id)
@@ -96,7 +96,7 @@ const App = () => {
         {/* Name Search: <input value={searchTerm} onChange={handleSearchChange}/> */}
       </div>
       <h2>Add New Record</h2>
-      <Notification message={status} />
+      <Notification notification={notification} />
       <Form 
       addPerson={addPerson}
       handleNameChange={handleNameChange}

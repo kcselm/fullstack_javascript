@@ -1,23 +1,14 @@
 import React from 'react'
 
-export const Notification = ({ message }) => {
+export const Notification = ({ notification }) => {
 
-  if (message === '' || undefined) {
+  if (notification === null) {
     return null
-  }
-  const notificationStyle = {
-    color: "green",
-    background: "lightgrey",
-    fontSize: "20px",
-    borderStyle: "solid",
-    borderRadius: "5px",
-    padding: "10px",
-    marginBottom: "10px",
   }
 
   return (
-    <div className="status" style={notificationStyle}>
-      {message}
+    <div className={notification.type}>
+      {notification.message}
     </div>
   )
 }
