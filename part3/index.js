@@ -31,13 +31,29 @@ app.get('/', (req, res) => {
 app.get('/api/persons', (req, res) => {
   const numberOfPeople = persons.map(person => person.name).length
   const time = Date.now()
+  console.log(persons)
   res.send(
     `<div>
       <div>Phonebook has info for ${numberOfPeople} people</div>
       <br>
       <div>${new Date()}<div/>
-    <div/>`)
+    <div/>`
+  )
 })
+
+
+app.get('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  const person = persons.find(person => person.id === id)
+  if (person) {
+    res.json(person)
+  } else {
+    res.send(
+      '<p>There are no people with that id</p>'
+    )
+  }
+  })
+
 
 const PORT = 3001
 app.listen(PORT, () => {
