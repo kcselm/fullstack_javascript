@@ -1,6 +1,22 @@
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
+
+app.use(express.json())
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+const requestLogger = (req, res, next) => {
+  console.log('Method:', req.method)
+  console.log('Path:  ', req.path)
+  console.log('Body:  ', req.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
 
 let persons = [
   {
@@ -32,7 +48,6 @@ app.get('/', (req, res) => {
 //GET all persons
 app.get('/api/persons', (req, res) => {
   const numberOfPeople = persons.map(person => person.name).length
-  const time = Date.now()
   console.log(persons)
   res.send(
     `<div>
@@ -50,35 +65,49 @@ app.get('/api/persons/:id', (req, res) => {
   if (person) {
     res.json(person)
   } else {
-    // response.status(404).end()
+    // res.status(404).end()
     res.send('<p>There are no people with that id</p>')
   }
   })
 
-//POST a new person to the object
-app.post('/api/persons', (req, res) => {
+const generateID = () => {
   // create id's between 100 and 1000
   const id = 100 + Math.floor(Math.random() * 900) 
-  // const person = {
-  //   name: "",
-  //   number: "",
-  //   id: id
-  // }
-  // res.send(`<h1>${id}</h1>`) 
+  return id
+}
 
-  const person = req.body
+
+//POST a new person to the object
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+  
+  if (!body.name) {
+    return res.status(400).json({ 
+      error: 'content missing' 
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateID()
+  }
+  // res.send(`<h1>${id}</h1>`)
+  
+  persons = persons.concat(person)
+
   console.log(person)
 
   res.json(person)
 
 })
 
-app.post('/api/persons', (request, response) => {
-  const person = request.body
-  console.log(person)
+// app.post('/api/persons', (request, response) => {
+//   const person = request.body
+//   console.log(person)
 
-  response.json(person)
-})
+//   response.json(person)
+// })
 
 //DELETE person from the object
 app.delete('/api/persons/:id', (req, res) => {
@@ -88,6 +117,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
