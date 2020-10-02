@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-// const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 app.use(express.json())
 
@@ -16,29 +16,41 @@ const requestLogger = (req, res, next) => {
   next()
 }
 
-app.use(requestLogger)
+// app.use(requestLogger)
+app.use(morgan('tiny'))
+morgan(function (tokens, req, res) {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'),
+    '-',
+    tokens['response-time'](req, res),
+    'ms',
+  ].join(' ')
+})
 
 let persons = [
   {
-    name: "Arto Hellas",
-    number: "040-123456",
-    id: 1
-    },
-    {
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-    id: 2
-    },
-    {
-    name: "Dan Abramov",
-    number: "12-43-234345",
-    id: 3
-    },
-    {
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-    id: 4
-    }
+    name: 'Arto Hellas',
+    number: '040-123456',
+    id: 1,
+  },
+  {
+    name: 'Ada Lovelace',
+    number: '39-44-5323523',
+    id: 2,
+  },
+  {
+    name: 'Dan Abramov',
+    number: '12-43-234345',
+    id: 3,
+  },
+  {
+    name: 'Mary Poppendieck',
+    number: '39-23-6423122',
+    id: 4,
+  },
 ]
 
 app.get('/', (req, res) => {
@@ -47,7 +59,7 @@ app.get('/', (req, res) => {
 
 //GET all persons
 app.get('/api/persons', (req, res) => {
-  const numberOfPeople = persons.map(person => person.name).length
+  const numberOfPeople = persons.map((person) => person.name).length
   console.log(persons)
   res.send(
     `<div>
@@ -61,45 +73,43 @@ app.get('/api/persons', (req, res) => {
 //GET a particular person
 app.get('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
+  const person = persons.find((person) => person.id === id)
   if (person) {
     res.json(person)
   } else {
     // res.status(404).end()
     res.send('<p>There are no people with that id</p>')
   }
-  })
+})
 
 const generateID = () => {
   // create id's between 100 and 1000
-  const id = 100 + Math.floor(Math.random() * 900) 
+  const id = 100 + Math.floor(Math.random() * 900)
   return id
 }
-
 
 //POST a new person to the object
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  
+
   if (!body.name) {
-    return res.status(400).json({ 
-      error: 'content missing' 
+    return res.status(400).json({
+      error: 'content missing',
     })
   }
 
   const person = {
     name: body.name,
     number: body.number,
-    id: generateID()
+    id: generateID(),
   }
   // res.send(`<h1>${id}</h1>`)
-  
+
   persons = persons.concat(person)
 
   console.log(person)
 
   res.json(person)
-
 })
 
 // app.post('/api/persons', (request, response) => {
@@ -112,12 +122,16 @@ app.post('/api/persons', (req, res) => {
 //DELETE person from the object
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
-  persons = persons.filter(person => person.id !== id)
+  persons = persons.filter((person) => person.id !== id)
 
   res.status(204).end()
 })
 
 app.use(unknownEndpoint)
+
+// const morgan = (tiny, ) => {
+
+// }
 
 const PORT = 3001
 app.listen(PORT, () => {
