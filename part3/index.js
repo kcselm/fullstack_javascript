@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -54,20 +57,21 @@ let persons = [
 ]
 
 app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
+  res.send('<h1>He/llo World!</h1>')
 })
 
 //GET all persons
 app.get('/api/persons', (req, res) => {
   const numberOfPeople = persons.map((person) => person.name).length
   console.log(persons)
-  res.send(
-    `<div>
-      <div>Phonebook has info for ${numberOfPeople} people</div>
-      <br>
-      <div>${new Date()}<div/>
-    <div/>`
-  )
+  // res.send(
+  //   `<div>
+  //     <div>Phonebook has info for ${numberOfPeople} people</div>
+  //     <br>
+  //     <div>${new Date()}<div/>
+  //   <div/>`
+  // )
+  res.json(persons)
 })
 
 //GET a particular person
